@@ -1,0 +1,175 @@
+<div class="container-fluid"  *ngIf="mostrarFormularioBusqueda">
+    <div class="row p-2">
+        <div class="col">
+            <div class="card p-1">
+                <div class="row">
+                    <div class="col">
+                        <div class="card-header text-white text-center bg-primary">
+                            <strong>
+                              Rectificaci&oacute;n Descarga Provisional de Mercanc&iacute;a Nacionalizada - DPMN
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="row p-2">
+                  <div class="col">
+                    <form id="formConsulta" [formGroup]="consultaForm" name="formConsulta">
+                      <fieldset class="form-group scheduler-border" >
+                        <div class="row top-buffer" >
+                          <div class="col-sm-3">
+                            <label class="col-form-label">Placa de vehículo:</label>
+                          </div>
+                          <!-- <div class="col-sm-4">
+                              <p-dropdown [filter]="true"  inputId="paisPlaca" [options]="catalogoPais" formControlName="codPaisPlaca" placeholder="Seleccionar  "
+                              optionLabel="desDataCat"  optionValue="codDatacat" [style] = "{'width':'100%'}">
+                              <ng-template let-item pTemplate="selectedItem">
+                                <div>{{item.value.codDatacat}}-{{item.value.desDataCat}}</div>
+                              </ng-template>
+                              <ng-template let-pais pTemplate="item">
+                                <div>{{pais.value.codDatacat}}-{{pais.value.desDataCat}}</div>
+                              </ng-template>
+                            </p-dropdown>
+                          </div> -->
+                          <div class="col-sm-4">
+                            <p-dropdown [filter]="true"   inputId="paisPlaca" [options]="lstPaisVehiculo" formControlName="codPaisPlaca" placeholder="Seleccionar"
+                              optionLabel="descripcion" optionValue="codigo" [style]="{'width':'100%'}" ></p-dropdown>
+                          </div>
+                          <div class="col-sm-5">
+                            <input type="text" class="form-control" id="txtNumeroPlaca"
+                            formControlName="numeroPlaca" pKeyFilter="alphanum"
+                            placeholder="Número de Placa" maxlength="8"
+                            [ngClass]="{'is-invalid': frmCtrlNumeroPlaca.invalid}"/>
+                            <div *ngIf="frmCtrlNumeroPlaca.invalid" class="invalid-feedback">
+                              Ingrese n&uacute;mero de placa correcto
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row top-buffer">
+                          <div class="col-sm-3">
+                            <label class="col-form-label">RUC Remitente:</label>
+                          </div>
+                          <div class="col-sm-4">
+                            <input type="text" class="form-control" id="txtNumeroRucRemitente" formControlName="numeroRucRemitente"
+                              pKeyFilter="pint" placeholder="Número de RUC" maxlength="11">
+                          </div>
+                          <div class="col-sm-5">
+                            <input type="text" class="form-control" readonly placeholder="Número de RUC" formControlName="descRazonSocialRemitente"/>
+                          </div>
+                        </div>
+
+                        <div class="row top-buffer">
+                          <div class="col-sm-3 field-radiobutton">
+                            <p-radioButton (onClick)="onRadioChange()" name="tipoBusqueda" value="1" label="Número de Documento:" formControlName="tipoBusqueda" [(ngModel)]="selectedValue"></p-radioButton>
+                          </div>
+                          <div class="col-sm-4">
+                            <p-dropdown inputId="codAduanaDocumento" [options]="catalogoAduanas" formControlName="codAduanaDocumento" placeholder="Seleccionar"
+                                optionLabel="desDataCat"  optionValue="codDatacat"  [style] = "{'width':'100%'}">
+                                <ng-template let-item pTemplate="selectedItem">
+                                  <div>{{item.value.codDatacat}}-{{item.value.desDataCat}}</div>
+                                </ng-template>
+                                <ng-template let-aduana pTemplate="item">
+                                  <div>{{aduana.value.codDatacat}}-{{aduana.value.desDataCat}}</div>
+                                </ng-template>
+                                          </p-dropdown>
+                          </div>
+
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="txtAnoDocumento" formControlName="anoDocumento" (blur)="validarAnioDocumento()"
+                            pKeyFilter="pint" placeholder="Año" maxlength="4">
+                          </div>
+                          <div class="col-sm-3">
+                            <input type="text" class="form-control" id="txtNumeroDocumento" formControlName="numeroDocumento"
+                            pKeyFilter="pint" placeholder="Número" [maxLength]="maxLengthNumDoc">
+                          </div>
+                        </div>
+
+                        <div class="row top-buffer">
+                          <div class="col-sm-3 field-radiobutton">
+                            <p-radioButton (onClick)="onRadioChange()" name="tipoBusqueda" value="2" formControlName="tipoBusqueda" label="Declaración:" [(ngModel)]="selectedValue"></p-radioButton>
+                          </div>
+                          <div class="col-sm-2">
+                            <p-dropdown inputId="codAduanaDAM" [options]="catalogoAduanas"   formControlName="codAduanaDAM" placeholder="Seleccionar"
+                               optionLabel="desDataCat" optionValue="codDatacat" [style] = "{'width':'100%'}">
+                               <ng-template let-item pTemplate="selectedItem">
+                                <div>{{item.value.codDatacat}}-{{item.value.desDataCat}}</div>
+                              </ng-template>
+                               <ng-template let-aduana pTemplate="item">
+                                <div>{{aduana.value.codDatacat}}-{{aduana.value.desDataCat}}</div>
+                              </ng-template>
+                            </p-dropdown>
+                          </div>
+                          <div class="col-sm-3">
+                            <p-dropdown  inputId="codRegimen" [options]="catalogoRegimen" formControlName="codRegimen" placeholder="Seleccionar"
+                                [showClear]="true" optionLabel="desDataCat" optionValue="codDatacat" [style] = "{'width':'100%'}" >
+                                <ng-template let-item pTemplate="selectedItem">
+                                  <div>{{item.value.codDatacat}}-{{item.value.desDataCat}}</div>
+                                </ng-template>
+                                <ng-template let-regimen pTemplate="item">
+                                  <div>{{regimen.value.codDatacat}}-{{regimen.value.desDataCat}}</div>
+                                </ng-template>
+                             </p-dropdown>
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="txtAnoDAM" formControlName="anoDAM" (blur)="validarAnioDeclaracion()" pKeyFilter="pint" placeholder="Año" maxlength="4">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control" id="txtNumeroDAM" formControlName="numeroDAM" pKeyFilter="pint" placeholder="Número" maxlength="6">
+                          </div>
+                        </div>
+
+                        <div class="row top-buffer">
+                          <div class="col-sm-4 field-radiobutton">
+                            <p-radioButton (onClick)="onRadioChange()" name="tipoBusqueda" value="3" formControlName="tipoBusqueda" label="Fecha de Registro:" [(ngModel)]="selectedValue"></p-radioButton>
+                          </div>
+                          <div class="col-sm-4">
+                            <p-calendar formControlName="fechaInicio" [style] = "{'height':'50px'}"
+                            dateFormat="dd/mm/yy" [maxDate]="date" [showIcon]="true" inputId="icon" [attr.disabled]="true" [locale]="en"></p-calendar>
+                          </div>
+                          <div class="col-sm-4">
+                            <p-calendar formControlName="fechaFin"  [style]="{'height':'50px'}"
+
+                            dateFormat="dd/mm/yy" [maxDate]="date" [showIcon]="true" inputId="icon" [attr.disabled]="true" [locale]="en"></p-calendar>
+                          </div>
+                        </div>
+                       <br>
+                        <!--Botones-->
+                        <div class="row top-buffer justify-content-center">
+                          <div class="col-sm-2">
+                              <button type="button" id="btnLimpiar" class="btn btn-primary btn-block" (click)="limpiar()">
+                                &nbsp;Limpiar
+                              </button>
+                          </div>
+                          <div class="col-sm-2">
+                              <button type="button" id="btnConsultar" class="btn btn-primary btn-block"
+                                [disabled]="rptaItemDpmnParaRectificar?.estado === estadoBusqueda.LOADING"
+                                (click)="consultar()" >
+                                <span class="spinner-border spinner-border-sm"
+                                  *ngIf="rptaItemDpmnParaRectificar?.estado === estadoBusqueda.LOADING"
+                                  role="status" aria-hidden="true"></span>
+                                  <i class="bi bi-plus-square-fill"></i>
+                                &nbsp;Buscar
+                             </button>
+                            </div>
+                        </div>
+
+                      </fieldset>
+                    </form>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+  </div>
+
+  <p-toast position="top-right" key="msj"></p-toast>
+
+
+  <p-dialog  header="Error" [(visible)]="mostrarDlgFuncionarioError" [modal]="true"  [closable] = "false"
+      [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+      <div class="text-center">
+        <span class="font-weight-bolder text-info">
+          {{mensajeFuncionario}}
+        </span>
+      </div>
+  </p-dialog>
